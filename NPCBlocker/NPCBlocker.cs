@@ -25,7 +25,7 @@ using Terraria;
 
 namespace NPCBlocker
 {
-    [ApiVersion(1, 17)]
+    [ApiVersion(1, 18)]
     public class NPCBlocker : TerrariaPlugin
     {
         private IDbConnection db;
@@ -95,7 +95,7 @@ namespace NPCBlocker
                 }
                 catch (MySqlException ex)
                 {
-                    Log.Error(ex.ToString());
+                    TShock.Log.Error(ex.ToString());
                     throw new Exception("MySql not setup correctly");
                 }
             }
@@ -111,7 +111,7 @@ namespace NPCBlocker
                                               db.GetSqlType() == SqlType.Sqlite
                                                 ? (IQueryBuilder)new SqliteQueryCreator()
                                                 : new MysqlQueryCreator());
-            creator2.EnsureExists(table2);
+            creator2.EnsureTableStructure(table2);
         }
 
         private void ReadDb()
@@ -145,7 +145,7 @@ namespace NPCBlocker
 
             if (db.Query(query, id) != 1)
             {
-                Log.ConsoleError("Inserting into the database has failed!");
+                TShock.Log.ConsoleError("Inserting into the database has failed!");
                 args.Player.SendMessage(String.Format("Inserting into the database has failed!", id), Color.Red);
             }
             else
@@ -173,7 +173,7 @@ namespace NPCBlocker
 
             if (db.Query(query, id) != 1)
             {
-                Log.ConsoleError("Removing from the database has failed!");
+                TShock.Log.ConsoleError("Removing from the database has failed!");
                 args.Player.SendMessage(String.Format("Removing from the database has failed!  Are you sure {0} is banned?", id), Color.Red);
             }
             else
